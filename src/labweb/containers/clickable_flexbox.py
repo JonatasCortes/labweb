@@ -3,7 +3,7 @@ from src.labweb.constants import FlexDirection, HorizontalAlignment, VerticalAli
 from src.labweb.containers.hover_emphasizing_flexbox import HoverEmphasizingFlexBox
 from src.labweb.color import Color
 from pygame.event import Event
-from src.labweb.mouse import Mouse
+from labweb.system_input.mouse import Mouse
 from src.labweb.entities import CopiableEntity
 
 

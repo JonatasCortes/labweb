@@ -4,7 +4,7 @@ from pygame.locals import QUIT
 from src.labweb.color import Color
 from src.labweb.containers.flexbox import FlexBox
 from src.labweb.constants import FlexDirection, HorizontalAlignment, VerticalAlignment
-from src.labweb.mouse import Mouse
+from labweb.system_input.mouse import Mouse
 from pygame._sdl2 import Window as PygameWindow
 import pygame
 import sys
