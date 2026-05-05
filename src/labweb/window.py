@@ -51,19 +51,29 @@ class Window(FlexBox):
 
         mouse = Mouse()
         keyboard = KeyBoard()
+        last_event = None
 
         self.__running = True
         while self.__running:
 
-            for event in pygame.event.get():
+            if events := pygame.event.get():
+                for event in events:
 
-                keyboard.update_event(event)
-                mouse.update_event(event)
-                mouse.update_refference_origin(*self.get_window_coordinates())
+                    keyboard.update_event(event)
+                    mouse.update_event(event)
+                    mouse.update_refference_origin(
+                        *self.get_window_coordinates())
 
-                if event.type == QUIT:
-                    sys.exit()
-                self.handle_event(event, mouse=mouse,
+                    if event.type == QUIT:
+                        sys.exit()
+
+                    self.handle_event(event, mouse=mouse,
+                                      keyboard=keyboard,
+                                      screen=self.__screen)
+                    last_event = event
+
+            elif last_event:
+                self.handle_event(last_event, mouse=mouse,
                                   keyboard=keyboard,
                                   screen=self.__screen)
 
