@@ -53,3 +53,18 @@ class FirstTimeEventListener(EventListener):
         if not self.__has_triggered and self._trigger_condition():
             self._trigger_actions()
             self.__has_triggered = True
+
+
+class ChangeEventListener(EventListener):
+
+    def __init__(self, condition: Callable[..., bool], actions: Callable[..., Any] | list[Callable[..., Any]]) -> None:
+        self.__previous_state = None
+        super().__init__(condition, actions)
+
+    def handle_event(self, event: Event, *args: Any, **kwargs: Any) -> None:
+
+        condition_value = self._trigger_condition()
+        if self.__previous_state is not None and condition_value != self.__previous_state:
+            self._trigger_actions()
+
+        self.__previous_state = condition_value
