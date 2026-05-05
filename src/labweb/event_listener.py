@@ -29,11 +29,18 @@ class EventListener(EventSensitiveEntity):
         self.__action: list[Callable[..., Any]] = [action]
 
     def _trigger_condition(self, *args: Any, **kwargs: Any) -> bool:
-        return self.get_condition()(*args, **kwargs)
+        condition = self.get_condition()
+        try:
+            return condition(*args, **kwargs)
+        except TypeError:
+            return condition()
 
     def _trigger_actions(self, *args: Any, **kwargs: Any) -> None:
         for action in self.get_actions():
-            action(*args, **kwargs)
+            try:
+                action(*args, **kwargs)
+            except TypeError:
+                return action()
 
 
 class FirstTimeEventListener(EventListener):
