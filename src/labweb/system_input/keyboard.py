@@ -1,4 +1,5 @@
 from typing import Optional, Set
+from src.labweb.entities import Entity
 from pygame.event import Event
 import pygame
 from pygame.constants import (
@@ -47,7 +48,7 @@ class _PygameKeyMapper:
         raise ValueError(error)
 
 
-class KeyBoard:
+class KeyBoard(Entity):
     def __init__(self) -> None:
         self.__event: Optional[Event] = None
         self.__buffer: list[str] = []
@@ -95,14 +96,14 @@ class KeyBoard:
     def key_up_event(self, key: str) -> bool:
         return self.__key_events(key, KEYUP)
 
-    def ctrl_pressed(self) -> bool:
+    def ctrl_active(self) -> bool:
         return bool(self.__mod & KMOD_CTRL)
 
-    def shift_pressed(self) -> bool:
+    def shift_active(self) -> bool:
         return bool(self.__mod & KMOD_SHIFT)
 
-    def alt_pressed(self) -> bool:
+    def alt_active(self) -> bool:
         return bool(self.__mod & KMOD_ALT)
 
-    def meta_pressed(self) -> bool:
+    def meta_active(self) -> bool:
         return bool(self.__mod & KMOD_META)
