@@ -2,7 +2,6 @@ from typing import Any, Callable
 from src.labweb.constants import FlexDirection, HorizontalAlignment, VerticalAlignment
 from src.labweb.containers.clickable_flexbox import ClickableFlexBox
 from src.labweb.color import Color
-from pygame.event import Event
 
 
 class Button(ClickableFlexBox):
@@ -43,8 +42,8 @@ class Button(ClickableFlexBox):
     def get_actions(self) -> list[Callable[..., Any]]:
         return self.__actions
 
-    def handle_event(self, event: Event, *args: Any, **kwargs: Any) -> None:
-        super().handle_event(event, *args, **kwargs)
+    def handle_event(self, *args: Any, **kwargs: Any) -> None:
+        super().handle_event(*args, **kwargs)
         self.__add_click_listener()
 
     def copy(self) -> "Button":

@@ -1,5 +1,4 @@
 from src.labweb.entities import EventSensitiveEntity
-from pygame.event import Event
 from typing import Any, Callable
 
 
@@ -9,9 +8,9 @@ class EventListener(EventSensitiveEntity):
         self.set_actions(actions)
         self.set_condition(condition)
 
-    def handle_event(self, event: Event, *args: Any, **kwargs: Any) -> None:
-        if self._trigger_condition(*args, **kwargs, event=event):
-            self._trigger_actions(*args, **kwargs, event=event)
+    def handle_event(self, *args: Any, **kwargs: Any) -> None:
+        if self._trigger_condition(*args, **kwargs):
+            self._trigger_actions(*args, **kwargs)
 
     def get_condition(self) -> Callable[..., bool]:
         return self.__condition
@@ -49,7 +48,7 @@ class FirstTimeEventListener(EventListener):
         self.__has_triggered = False
         super().__init__(condition, actions)
 
-    def handle_event(self, event: Event, *args: Any, **kwargs: Any) -> None:
+    def handle_event(self, *args: Any, **kwargs: Any) -> None:
         if not self.__has_triggered and self._trigger_condition():
             self._trigger_actions()
             self.__has_triggered = True
@@ -61,7 +60,7 @@ class ChangeEventListener(EventListener):
         self.__previous_state = None
         super().__init__(condition, actions)
 
-    def handle_event(self, event: Event, *args: Any, **kwargs: Any) -> None:
+    def handle_event(self, *args: Any, **kwargs: Any) -> None:
 
         condition_value = self._trigger_condition()
         if self.__previous_state is not None and condition_value != self.__previous_state:

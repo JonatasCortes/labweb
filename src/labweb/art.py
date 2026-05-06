@@ -2,7 +2,6 @@ from typing import Any
 from src.labweb.system_input.mouse import Mouse
 from src.labweb.color import Color
 from src.labweb.area import RectangularArea
-from pygame.event import Event
 from pygame import Surface
 import pygame
 from src.labweb.utils import point_to_segment_distance
@@ -109,7 +108,7 @@ class DrawingArea(RectangularArea):
     def get_drawing_state(self) -> _DrawingState:
         return self.__drawing_state
 
-    def handle_event(self, event: Event, *args: Any, **kwargs: Any) -> None:
+    def handle_event(self, *args: Any, **kwargs: Any) -> None:
         mouse = kwargs.get("mouse")
 
         if not isinstance(mouse, Mouse):

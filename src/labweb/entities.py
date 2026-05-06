@@ -1,7 +1,6 @@
 from src.labweb.color import Color
 from abc import ABC, abstractmethod
 from pygame import Surface
-from pygame.event import Event
 from typing import Any
 
 
@@ -11,7 +10,7 @@ class Entity(ABC):
 
 class EventSensitiveEntity(Entity):
     @abstractmethod
-    def handle_event(self, event: Event, *args: Any, **kwargs: Any) -> None:
+    def handle_event(self, *args: Any, **kwargs: Any) -> None:
         error = f"ERROR: 'handle_event' can't be called directly from {self.__class__.__name__}"
         raise NotImplementedError(error)
 
@@ -104,15 +103,3 @@ class ColorableEntity(Entity):
     def color_is(self, color: Color | tuple[int, ...] | str) -> bool:
         color = color if isinstance(color, Color) else Color(color)
         return self.get_color() == color
-
-
-class DefaultEntity(EventSensitiveEntity, DisplayableEntity, ContainableEntity, ColorableEntity, CopiableEntity):
-
-    def __init__(self, x: int, y: int, width: int, height: int, color: Color | tuple[int, ...] | str) -> None:
-        super().__init__(x=x, y=y, width=width, height=height, color=color)
-
-    def set_x(self, x: int) -> None: return self._set_x(x)
-    def set_y(self, y: int) -> None: return self._set_y(y)
-
-    def set_color(self, color: Color | tuple[int, ...] | str):
-        return self._set_color(color)

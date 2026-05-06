@@ -2,7 +2,6 @@ from typing import Any
 from src.labweb.constants import FlexDirection, HorizontalAlignment, VerticalAlignment
 from src.labweb.containers.hover_emphasizing_flexbox import HoverEmphasizingFlexBox
 from src.labweb.color import Color
-from pygame.event import Event
 from src.labweb.system_input.mouse import Mouse
 
 
@@ -49,14 +48,14 @@ class ClickableFlexBox(HoverEmphasizingFlexBox):
     def is_held(self) -> bool:
         return self.__is_held
 
-    def handle_event(self, event: Event, *args: Any, **kwargs: Any) -> None:
+    def handle_event(self, *args: Any, **kwargs: Any) -> None:
         mouse = kwargs.get("mouse")
         if not isinstance(mouse, Mouse):
             error = "Expected a Mouse instance in kwargs with key 'mouse'"
             raise ValueError(error)
         self.__add_click_listener(mouse)
         self.__add_hold_listener(mouse)
-        super().handle_event(event, *args, **kwargs)
+        super().handle_event(*args, **kwargs)
 
     def copy(self) -> "ClickableFlexBox":
         instance = self._copy()

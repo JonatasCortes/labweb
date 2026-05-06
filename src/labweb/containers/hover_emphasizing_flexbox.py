@@ -1,4 +1,3 @@
-from pygame.event import Event
 from src.labweb.color import Color
 from typing import Any, Union
 from src.labweb.constants import VerticalAlignment, HorizontalAlignment, FlexDirection
@@ -38,13 +37,13 @@ class HoverEmphasizingFlexBox(FlexBox):
 
         super().set_color(color)
 
-    def handle_event(self, event: Event, *args: Any, **kwargs: Any) -> None:
+    def handle_event(self, *args: Any, **kwargs: Any) -> None:
         mouse = kwargs.get("mouse")
         if not isinstance(mouse, Mouse):
             error = "Expected a Mouse instance in kwargs with key 'mouse'"
             raise ValueError(error)
         self.__add_hover_listener(mouse.get_position())
-        return super().handle_event(event, *args, **kwargs)
+        return super().handle_event(*args, **kwargs)
 
     def set_color(self, color: Color | tuple[int, ...] | str):
         if not isinstance(color, Color):
