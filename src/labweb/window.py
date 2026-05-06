@@ -32,7 +32,7 @@ class Window(FlexBox):
                          corners_radius=0, color=color, bounded=True)
 
     @classmethod
-    def setup(cls, width: int = 640, height: int = 480, caption: str = "PyPaint") -> None:
+    def setup(cls, width: int = 640, height: int = 480, caption: str = "LabWeb") -> None:
         pygame.init()
         cls.__screen = pygame.display.set_mode((width, height))
         cls.__clock = pygame.time.Clock()
@@ -51,29 +51,29 @@ class Window(FlexBox):
 
         mouse = Mouse()
         keyboard = KeyBoard()
-        last_event = None
 
         self.__running = True
         while self.__running:
+
+            mouse.update_refference_origin(
+                *self.get_window_coordinates())
 
             if events := pygame.event.get():
                 for event in events:
 
                     keyboard.update_event(event)
                     mouse.update_event(event)
-                    mouse.update_refference_origin(
-                        *self.get_window_coordinates())
 
                     if event.type == QUIT:
                         sys.exit()
 
-                    self.handle_event(event, mouse=mouse,
+                    self.handle_event(event=event, mouse=mouse,
                                       keyboard=keyboard,
                                       screen=self.__screen)
-                    last_event = event
-
-            elif last_event:
-                self.handle_event(last_event, mouse=mouse,
+            else:
+                keyboard.update_event(None)
+                mouse.update_event(None)
+                self.handle_event(mouse=mouse,
                                   keyboard=keyboard,
                                   screen=self.__screen)
 
