@@ -78,12 +78,14 @@ class KeyBoard(Entity):
     def peek(self) -> list[str]:
         return self.__buffer.copy()
 
-    def last_input(self) -> str:
+    def last_input(self) -> Optional[str]:
+        if not self.__buffer:
+            return None
         return self.__buffer[-1]
 
     def key_pressed(self, key: str) -> bool:
         key_values = self.__key_mapper.get_key(key)
-        return any(key in self.__pressed_keys for key in key_values)
+        return any(k in self.__pressed_keys for k in key_values)
 
     def __key_events(self, key: str, event_type: int) -> bool:
         key = key.lower()
@@ -94,11 +96,25 @@ class KeyBoard(Entity):
             any(k == self.__event.key for k in key_values)
         )
 
-    def key_down_event(self, key: str) -> bool:
+    def key_down(self, key: str) -> bool:
         return self.__key_events(key, KEYDOWN)
 
-    def key_up_event(self, key: str) -> bool:
+    def key_up(self, key: str) -> bool:
         return self.__key_events(key, KEYUP)
+
+    def __is_event_type(self, type: int) -> bool:
+        if self.__event and self.__event.type == type:
+            return True
+        return False
+
+    def any_key_down(self) -> bool:
+        return self.__is_event_type(KEYDOWN)
+
+    def any_key_up(self) -> bool:
+        return self.__is_event_type(KEYUP)
+
+    def any_text_input(self) -> bool:
+        return self.__is_event_type(TEXTINPUT)
 
     def ctrl_active(self) -> bool:
         return bool(self.__mod & KMOD_CTRL)
