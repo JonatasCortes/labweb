@@ -38,10 +38,12 @@ class _PygameKeyMapper:
 
     def get_key(self, key_name: str) -> list[int]:
 
-        if key_value := self.__SPECIAL_KEYS.get(key_name):
+        lower_key_name = key_name.lower()
+
+        if key_value := self.__SPECIAL_KEYS.get(lower_key_name):
             return key_value
 
-        if key_value := self.__key_map.get(key_name):
+        if key_value := self.__key_map.get(lower_key_name):
             return [key_value]
 
         error = f"{key_name} is not recognised as a valid key name"
