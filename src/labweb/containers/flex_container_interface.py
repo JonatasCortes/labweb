@@ -13,12 +13,12 @@ class FlexContainerInterface(RectangularArea, EventSensitiveEntity):
                  height: int,
                  padding: int = 0,
                  space_between: int = 0,
-                 flex_direction: str | FlexDirection = FlexDirection.COLUMN,
-                 horizontal_alignment: str | HorizontalAlignment = HorizontalAlignment.CENTER,
-                 vertical_alignment: str | VerticalAlignment = VerticalAlignment.CENTER,
+                 flex_direction: str | FlexDirection = "COLUMN",
+                 horizontal_alignment: str | HorizontalAlignment = "CENTER",
+                 vertical_alignment: str | VerticalAlignment = "CENTER",
                  corners_radius: tuple[int, int, int, int] | int = 0,
                  color: Union[Color, tuple[int, int, int], str] = "BLACK",
-                 bounded: bool = True) -> None:
+                 bounded: bool = True, *args: Any, **kwargs: Any) -> None:
 
         self.__children: list[Entity] = []
         self._bounded = bounded
@@ -53,20 +53,23 @@ class FlexContainerInterface(RectangularArea, EventSensitiveEntity):
     def _get_vertical_alignment(self) -> VerticalAlignment:
         return self._vertical_alignment
 
-    def _set_horizontal_alignment(self, horizontal_alignment: HorizontalAlignment = HorizontalAlignment.CENTER) -> None:
-        self._horizontal_alignment = horizontal_alignment
+    def _set_horizontal_alignment(self, horizontal_alignment: HorizontalAlignment | str) -> None:
+        self._horizontal_alignment = HorizontalAlignment(horizontal_alignment)
         self._align()
 
-    def _set_vertical_alignment(self, vertical_alignment: VerticalAlignment = VerticalAlignment.CENTER) -> None:
-        self._vertical_alignment = vertical_alignment
+    def _set_vertical_alignment(self, vertical_alignment: VerticalAlignment | str) -> None:
+        self._vertical_alignment = VerticalAlignment(vertical_alignment)
+        self._align()
+
+    def _set_flex_direction(self, flex_direction: FlexDirection | str) -> None:
+        self._flex_direction = FlexDirection(flex_direction)
         self._align()
 
     def _switch_direction(self) -> None:
         if self._flex_direction == FlexDirection.COLUMN:
-            self._flex_direction = FlexDirection.ROW
+            self._set_flex_direction("ROW")
         else:
-            self._flex_direction = FlexDirection.COLUMN
-        self._align()
+            self._set_flex_direction("COLUMN")
 
     def display(self, screen: Surface) -> None:
         super().display(screen)
@@ -80,11 +83,15 @@ class FlexContainerInterface(RectangularArea, EventSensitiveEntity):
                 child.handle_event(*args, **kwargs)
 
     def _add(self, entity: Union[Entity, list[Entity]]) -> None:
-        if isinstance(entity, list):
+        if not isinstance(entity, list):
+            entity = [entity]
+        try:
             self.__children.extend(entity)
-        else:
-            self.__children.append(entity)
-        self._align()
+            self._align()
+        except ValueError as error:
+            for e in entity:
+                self.__children.remove(e)
+            raise error
 
     def _set_children(self, children: list[Entity]) -> None:
         self.__children = children

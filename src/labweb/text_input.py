@@ -2,25 +2,78 @@ from typing import Any, Optional
 from src.labweb.entities import Entity
 from src.labweb.text import Text
 from src.labweb.color import Color
-from src.labweb.containers.protected_flexslot import ProtectedFlexSlot
-from src.labweb.containers.flexbox import FlexBox
-from src.labweb.containers.clickable_flexbox import ClickableFlexBox
+from src.labweb.containers.flexslot.clickable_flexslot import ClickableFlexSlot
+from src.labweb.containers.flexslot.flexslot import FlexSlot
+from src.labweb.containers.flexbox.flexbox import FlexBox
 from src.labweb.system_input.mouse import Mouse
 from src.labweb.system_input.keyboard import KeyBoard
 
 
-class _TextInputCell(ClickableFlexBox):
+class _TextInputCell(FlexSlot):
 
     def __init__(self, value: str | Text, max_width: int, max_height: int, background_color: Color | tuple[int, int, int] | str, text_color: Color | tuple[int, int, int] | str) -> None:
         text = value if isinstance(value, Text) else Text(value,
                                                           color=text_color)
         text = text.maximize(max_width, max_height)
-        super().__init__(text.get_width(), text.get_height(), 0, 0, "ROW",
-                         "CENTER", "CENTER", 0, background_color, 0, True)
-        self.add(text)
+        super().__init__(text.get_width(), text.get_height(), 0,
+                         "CENTER", "CENTER", 0, background_color, True)
+        self._set_child(text)
 
 
-class TextInput(ProtectedFlexSlot):
+class _TextInputContainer(FlexBox):
+
+    def __init__(self,
+                 width: int,
+                 height: int,
+                 corners_radius: tuple[int, int, int, int] | int,
+                 color: Color | tuple[int, int, int] | str,
+                 text_color: Color | tuple[int, int, int] | str) -> None:
+
+        super().__init__(width, height, 0, 0, "ROW", "LEFT",
+                         "CENTER", corners_radius, color, True)
+        self.set_text_color(text_color)
+
+    def set_text_color(self, color: Color | tuple[int, int, int] | str):
+        self.__text_color = color if isinstance(color, Color) else Color(color)
+
+    def get_text_color(self) -> Color:
+        return self.__text_color
+
+    def add_cell(self, text: str) -> None:
+        cell = _TextInputCell(text, self.get_width(),
+                              self.get_height(),
+                              self.get_color(),
+                              self.get_text_color())
+        self.add(cell)
+
+    def force_cell_append(self, text: str):
+        while True:
+            try:
+                self.add_cell(text)
+                return
+            except ValueError:
+                new_cells_list = self.get_children()[1::]
+                self.set_children(new_cells_list)
+
+    def delete_last_word(self):
+        while len(self.get_children()) > 0:
+            removed_cell = self.pop()
+            char = self.__retrieve_character_from_cell(removed_cell)
+            if char == " ":
+                break
+
+    def __retrieve_character_from_cell(self, cell: Optional[Entity]) -> Optional[str]:
+        if not isinstance(cell, _TextInputCell):
+            return
+
+        removed_text_instance = cell.get_child()
+        if not isinstance(removed_text_instance, Text):
+            return
+
+        return removed_text_instance.get_text()
+
+
+class TextInput(ClickableFlexSlot):
 
     __HORIZONTAL_PADDING_PERCENTAGE = 5
     __VERTICAL_PADDING_PERCENTAGE = 33
@@ -35,25 +88,17 @@ class TextInput(ProtectedFlexSlot):
 
         super().__init__(width, height, 0, "CENTER", "CENTER",
                          corners_radius, background_color, True)
-        self.set_text_color(text_color)
+        self.__set_text_container(text_color)
         self.__is_focused = False
         self.__text = ""
-        self.__set_text_container()
 
     def is_focused(self) -> bool:
         return self.__is_focused
 
-    def set_text_color(self, color: Color | tuple[int, int, int] | str = "BLACK"):
-        self.__text_color = color if isinstance(color, Color) else Color(color)
-
-    def get_text_color(self) -> Color:
-        return self.__text_color
-
-    def __set_text_container(self, ) -> None:
-        self.__text_container = FlexBox(self.get_width() - self.__calcuate_horizontal_padding(),
-                                        self.get_height() - self.__calculate_vertical_padding(),
-                                        0, 0, "ROW", "LEFT", "CENTER", self.get_corners_radius(),
-                                        self.get_color(), True)
+    def __set_text_container(self, text_color: Color | tuple[int, int, int] | str) -> None:
+        self.__text_container = _TextInputContainer(self.get_width() - self.__calcuate_horizontal_padding(),
+                                                    self.get_height() - self.__calculate_vertical_padding(),
+                                                    self.get_corners_radius(), self.get_color(), text_color)
         self._add(self.__text_container)
 
     def __calcuate_horizontal_padding(self) -> int:
@@ -63,6 +108,7 @@ class TextInput(ProtectedFlexSlot):
         return self.__VERTICAL_PADDING_PERCENTAGE*self.get_height()//100
 
     def handle_event(self, *args: Any, **kwargs: Any):
+        super().handle_event(*args, **kwargs)
         mouse = kwargs.get("mouse")
         keyboard = kwargs.get("keyboard")
         if not isinstance(mouse, Mouse) or not isinstance(keyboard, KeyBoard):
@@ -73,12 +119,11 @@ class TextInput(ProtectedFlexSlot):
         self.__add_delete_listener(keyboard)
 
     def __add_focus_listener(self, mouse: Mouse):
-        if not mouse.is_clicked():
-            return
-        if self.contains(mouse.get_position()):
+        if self.is_clicked():
             self.__is_focused = True
             return
-        self.__is_focused = False
+        elif mouse.is_clicked():
+            self.__is_focused = False
 
     def __add_typing_listener(self, keyboard: KeyBoard):
         if not self.is_focused():
@@ -87,11 +132,7 @@ class TextInput(ProtectedFlexSlot):
             text = keyboard.last_input()
             if not text:
                 return
-            self.__text += text
-            cell = _TextInputCell(text, self.__text_container.get_width(),
-                                  self.__text_container.get_height(),
-                                  self.get_color(), self.get_text_color())
-            self.__text_container.add(cell)
+            self.__text_container.force_cell_append(text)
 
     def __add_delete_listener(self, keyboard: KeyBoard):
 
@@ -102,22 +143,4 @@ class TextInput(ProtectedFlexSlot):
             self.__text_container.pop()
             return
 
-        removed_cell = self.__text_container.pop()
-        removed_character = self.__retrieve_character_from_cell(removed_cell)
-
-        while removed_character != " ":
-            removed_cell = self.__text_container.pop()
-            removed_character = self.__retrieve_character_from_cell(
-                removed_cell)
-            if removed_character is None:
-                return
-
-    def __retrieve_character_from_cell(self, cell: Optional[Entity]) -> Optional[str]:
-        if not isinstance(cell, _TextInputCell):
-            return
-
-        removed_text_instance = cell.pop()
-        if not isinstance(removed_text_instance, Text):
-            return
-
-        return removed_text_instance.get_text()
+        self.__text_container.delete_last_word()

@@ -1,7 +1,7 @@
 from src.labweb.containers.flex_container_interface import FlexContainerInterface
 from src.labweb.color import Color
-from src.labweb.entities import Entity, ContainableEntity, CopiableEntity
-from typing import Optional
+from src.labweb.entities import Entity, ContainableEntity
+from typing import Any, Optional
 from src.labweb.constants import VerticalAlignment, HorizontalAlignment, FlexDirection
 
 
@@ -15,7 +15,7 @@ class ProtectedFlexSlot(FlexContainerInterface):
                  vertical_alignment: str | VerticalAlignment = VerticalAlignment.CENTER,
                  corners_radius: tuple[int, int, int, int] | int = 0,
                  color: Color | tuple[int, int, int] | str = "BLACK",
-                 bounded: bool = True) -> None:
+                 bounded: bool = True, *args: Any, **kwargs: Any) -> None:
 
         super().__init__(width, height, padding, 0, FlexDirection.COLUMN,
                          horizontal_alignment, vertical_alignment,
@@ -39,11 +39,7 @@ class ProtectedFlexSlot(FlexContainerInterface):
                                   self.get_corners_radius(),
                                   self.get_color(),
                                   self._is_bounded())
-        child = self._get_child()
-        if isinstance(child, CopiableEntity):
-            new_slot._set_child(child.copy())
-        elif child:
-            new_slot._set_child(child)
+        self._migrate_children(new_slot)
         return new_slot
 
     def _align(self) -> None:

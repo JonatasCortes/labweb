@@ -2,7 +2,7 @@ from typing import Optional
 
 from src.labweb.constants import HorizontalAlignment, VerticalAlignment
 from src.labweb.entities import Entity
-from src.labweb.containers.protected_flexslot import ProtectedFlexSlot
+from src.labweb.containers.flexslot.protected_flexslot import ProtectedFlexSlot
 
 
 class FlexSlot(ProtectedFlexSlot):
@@ -12,6 +12,9 @@ class FlexSlot(ProtectedFlexSlot):
     def is_empty(self) -> bool: return self._is_empty()
     def is_bounded(self) -> bool: return self._is_bounded()
     def switch_direction(self) -> None: self._switch_direction()
+    def set_child(self, child: Entity) -> None: self._set_child(child)
+    def get_child(self) -> Optional[Entity]: return self._get_child()
+    def get_padding(self) -> int: return self._get_padding()
 
     def get_horizontal_alignment(self) -> HorizontalAlignment:
         return self._get_horizontal_alignment()

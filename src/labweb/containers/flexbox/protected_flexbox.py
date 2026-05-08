@@ -3,7 +3,7 @@ from src.labweb.constants import VerticalAlignment, HorizontalAlignment, FlexDir
 from src.labweb.containers.flex_container_interface import FlexContainerInterface
 
 
-class FlexContainer(FlexContainerInterface):
+class ProtectedFlexBox(FlexContainerInterface):
 
     def __get_main_dimension(self, entity: ContainableEntity) -> int:
         if self._get_flex_direction() == FlexDirection.COLUMN:
@@ -131,7 +131,7 @@ class FlexContainer(FlexContainerInterface):
 
         return safe_area_start
 
-    def copy(self) -> "FlexContainer":
+    def copy(self) -> "ProtectedFlexBox":
         instance = self._copy()
         assert isinstance(instance, self.__class__)
         return instance
