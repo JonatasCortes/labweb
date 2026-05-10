@@ -161,7 +161,6 @@ class _MacOsClipBoardBackend(_ClipBoardBackend):
 
         self.__paste_board = NSPasteboard
         self.__paste_board_type = NSPasteboardTypeTIFF
-        self.__url_class = NSURL
 
     @no_type_check
     def has_files(self) -> bool:
