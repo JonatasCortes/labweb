@@ -13,14 +13,17 @@ class Text(DisplayableEntity, ContainableEntity, ColorableEntity, CopiableEntity
         width, height = self.__get_dimensions()
         super().__init__(x=0, y=0, width=width, height=height, color=color)
 
-    def set_text(self, text: str) -> None:
-        self.__text = text
+    def set_text(self, text: str) -> None: self.__text = text
+    def get_text(self) -> str: return self.__text
+    def get_size(self) -> int: return self.__size
+    def __fix_x(self, x: int) -> int: return x + self.get_width()//2
+    def __fix_y(self, y: int) -> int: return y + self.get_height()//2
+    def set_x(self, x: int) -> None: super().set_x(self.__fix_x(x))
+    def set_y(self, y: int) -> None: super().set_y(self.__fix_y(y))
+    def is_empty(self) -> bool: return self.get_text() == ""
 
-    def get_text(self) -> str:
-        return self.__text
-
-    def get_size(self) -> int:
-        return self.__size
+    def set_color(self, color: Color | tuple[int, ...] | str):
+        return super()._set_color(color)
 
     def set_size(self, size: int) -> None:
         if size < 0:
@@ -30,18 +33,6 @@ class Text(DisplayableEntity, ContainableEntity, ColorableEntity, CopiableEntity
         new_width, new_height = self.__get_dimensions()
         self._set_width(new_width)
         self._set_height(new_height)
-
-    def __fix_x(self, x: int) -> int:
-        return x + self.get_width()//2
-
-    def __fix_y(self, y: int) -> int:
-        return y + self.get_height()//2
-
-    def set_x(self, x: int) -> None:
-        super().set_x(self.__fix_x(x))
-
-    def set_y(self, y: int) -> None:
-        super().set_y(self.__fix_y(y))
 
     def maximize(self, max_width: int, max_height: int) -> "Text":
         size = 0
@@ -68,9 +59,6 @@ class Text(DisplayableEntity, ContainableEntity, ColorableEntity, CopiableEntity
                                                   self.get_y()))
 
         screen.blit(text_surface, text_rect)
-
-    def is_empty(self) -> bool:
-        return self.get_text() == ""
 
     def copy(self) -> "Text":
         return self.__class__(text=self.get_text(),
