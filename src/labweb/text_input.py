@@ -1,11 +1,16 @@
 from typing import Any, Optional
-from src.labweb.entities import Entity
+
+import pygame
+from pygame import Surface
+from src.labweb.entities import Entity, DimensionableEntity
 from src.labweb.text import Text
 from src.labweb.color import Color
 from src.labweb.containers.clickable_flexbox import ClickableFlexBox
 from src.labweb.containers.flexbox import FlexBox
 from src.labweb.system.mouse import Mouse
 from src.labweb.system.keyboard import KeyBoard
+from src.labweb.system.clipboard import ClipBoard
+import time
 
 
 class _TextInputCell(FlexBox):
@@ -16,7 +21,25 @@ class _TextInputCell(FlexBox):
         text = text.maximize(max_width, max_height)
         super().__init__(text.get_width(), text.get_height(), 0, 0, "ROW",
                          "CENTER", "CENTER", 0, background_color, True)
+        self.__text = text
         self.add(text)
+        self.__is_selected = False
+        self.__defauld_background_color = background_color
+        self.__default_text_color = text_color
+
+    def is_selected(self) -> bool:
+        return self.__is_selected
+
+    def switch_selection_status(self) -> None:
+        self.__is_selected = not self.__is_selected
+
+    def handle_selection(self) -> None:
+        if self.is_selected():
+            self.set_color("BLUE")
+            self.__text.set_color("WHITE")
+            return
+        self.set_color(self.__defauld_background_color)
+        self.__text.set_color(self.__default_text_color)
 
 
 class _TextInputContainer(FlexBox):
@@ -76,6 +99,7 @@ class TextInput(ClickableFlexBox):
 
     __HORIZONTAL_PADDING_PERCENTAGE = 5
     __VERTICAL_PADDING_PERCENTAGE = 33
+    __CURSOR_HIDING_DELAY = 0.5
 
     def __init__(self,
                  width: int,
@@ -90,9 +114,24 @@ class TextInput(ClickableFlexBox):
         self.__set_text_container(text_color)
         self.__is_focused = False
         self.__text = ""
+        self.__cursor_index = 0
+        self.__display_cursor = False
+        self.__last_key_press_time = time.time()
 
     def is_focused(self) -> bool:
         return self.__is_focused
+
+    def __get_cursor_rect(self) -> tuple[int, ...]:
+
+        cursor_y = self.__text_container.get_y()
+        cursor_x = self.__text_container.get_x()
+        for letter in self.__text_container.get_children()[:self.__cursor_index+1]:
+            if isinstance(letter, DimensionableEntity):
+                cursor_x += letter.get_width()
+        cursor_width = 2
+        cursor_height = self.__text_container.get_height()
+
+        return (cursor_x, cursor_y, cursor_width, cursor_height)
 
     def __set_text_container(self, text_color: Color | tuple[int, int, int] | str) -> None:
         self.__text_container = _TextInputContainer(self.get_width() - self.__calcuate_horizontal_padding(),
@@ -108,14 +147,21 @@ class TextInput(ClickableFlexBox):
 
     def handle_event(self, *args: Any, **kwargs: Any):
         super().handle_event(*args, **kwargs)
+
         mouse = kwargs.get("mouse")
         keyboard = kwargs.get("keyboard")
-        if not isinstance(mouse, Mouse) or not isinstance(keyboard, KeyBoard):
-            raise ValueError(f"Expected a {Mouse.__name__} instance in kwargs with key 'mouse'",
-                             f"Expected a {KeyBoard.__name__} instance in kwwargs with key 'keyboard'")
+        clipboard = kwargs.get("clipboard")
+
+        if not isinstance(mouse, Mouse) or not isinstance(keyboard, KeyBoard) or not isinstance(clipboard, ClipBoard):
+            raise RuntimeError(f"Expected a {Mouse.__name__} instance in kwargs with key 'mouse'",
+                               f"Expected a {KeyBoard.__name__} instance in kwargs with key 'keyboard'",
+                               f"Expected a {ClipBoard.__name__} instance in kwargs with key 'clipboard'")
+
         self.__add_focus_listener(mouse)
         self.__add_typing_listener(keyboard)
         self.__add_delete_listener(keyboard)
+        self.__add_cursor_move_listener(keyboard)
+        self.__add_cursor_display_listener(keyboard)
 
     def __add_focus_listener(self, mouse: Mouse):
         if self.is_clicked():
@@ -133,6 +179,7 @@ class TextInput(ClickableFlexBox):
                 return
             self.__text_container.force_cell_append(text)
             self.__text += text
+            self.__cursor_index += len(text)
 
     def __add_delete_listener(self, keyboard: KeyBoard):
 
@@ -141,6 +188,42 @@ class TextInput(ClickableFlexBox):
         elif not keyboard.ctrl_active() and not keyboard.meta_active():
             self.__text_container.pop()
             self.__text = self.__text[:-1]
+            self.__cursor_index -= 1
         else:
+            last_word = self.__text.split(" ")[-1]
+            self.__cursor_index -= len(last_word)
             self.__text = " ".join(self.__text.split(" ")[:-1])
             self.__text_container.delete_last_word()
+
+    def __add_cursor_move_listener(self, keyboard: KeyBoard):
+        if not self.is_focused():
+            return
+        if keyboard.key_down("left"):
+            self.__cursor_index -= 1
+        elif keyboard.key_down("right"):
+            self.__cursor_index += 1
+
+    def __add_cursor_display_listener(self, keyboard: KeyBoard):
+        current_time = time.time()
+
+        if not self.is_focused():
+            self.__display_cursor = False
+            return
+
+        if keyboard.any_key_pressed():
+            self.__last_key_press_time = current_time
+            self.__display_cursor = True
+            return
+
+        time_since_last_press = current_time - self.__last_key_press_time
+
+        if time_since_last_press <= self.__CURSOR_HIDING_DELAY:
+            self.__display_cursor = True
+            return
+
+        self.__display_cursor = int(current_time * 1.5) % 2 == 0
+
+    def display(self, screen: Surface) -> None:
+        super().display(screen)
+        if self.__display_cursor:
+            pygame.draw.rect(screen, (0, 0, 0), self.__get_cursor_rect())
