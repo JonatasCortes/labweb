@@ -109,6 +109,9 @@ class KeyBoard(SystemListener):
             return True
         return False
 
+    def any_key_pressed(self) -> bool:
+        return len(self.__pressed_keys) != 0
+
     def any_key_down(self) -> bool:
         return self.__is_event_type(KEYDOWN)
 
