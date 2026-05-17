@@ -3,7 +3,7 @@ from src.labweb.system.mouse import Mouse
 from pygame.event import Event
 from typing import Any
 from src.labweb.constants import FlexDirection, HorizontalAlignment, VerticalAlignment
-from src.labweb.properties.color import Color
+from src.labweb.primitives.color import Color
 
 
 class DragDrop(FlexBox):

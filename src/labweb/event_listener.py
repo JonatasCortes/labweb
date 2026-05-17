@@ -1,6 +1,6 @@
 from typing import Callable, Any
 from src.labweb.system.mouse import Mouse
-from src.labweb.properties.color import Color
+from src.labweb.primitives.color import Color
 from src.labweb.entities.event_sensitive import EventSensitiveEntity
 from src.labweb.areas.interface import AreaInterface
 from typing import Any, Callable

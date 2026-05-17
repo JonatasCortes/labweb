@@ -1,4 +1,4 @@
-from src.labweb.properties.color import Color
+from src.labweb.primitives.color import Color
 from src.labweb.entities.entity import Entity
 from src.labweb.entities.containable import ContainableEntity
 from src.labweb.entities.displayable import DisplayableEntity

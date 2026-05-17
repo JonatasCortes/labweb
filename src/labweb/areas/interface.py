@@ -2,7 +2,7 @@ from src.labweb.entities.colorable import ColorableEntity
 from src.labweb.entities.containable import ContainableEntity
 from src.labweb.entities.copiable import CopiableEntity
 from src.labweb.entities.displayable import DisplayableEntity
-from src.labweb.properties.color import Color
+from src.labweb.primitives.color import Color
 
 
 class AreaInterface(ContainableEntity, DisplayableEntity, ColorableEntity, CopiableEntity):

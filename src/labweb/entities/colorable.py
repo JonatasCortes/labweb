@@ -1,5 +1,5 @@
 from src.labweb.entities.entity import Entity
-from src.labweb.properties.color import Color
+from src.labweb.primitives.color import Color
 from typing import Any
 
 

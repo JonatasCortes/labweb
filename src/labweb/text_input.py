@@ -3,12 +3,12 @@ import time
 import re
 from typing import Any, Optional, Union, Tuple, Final
 from pygame import Surface, Rect
-from src.labweb.properties.color import Color
+from src.labweb.primitives.color import Color
 from src.labweb.system.mouse import Mouse
 from src.labweb.system.keyboard import KeyBoard
 from src.labweb.system.clipboard import ClipBoard
 from src.labweb.areas.clickable_area import ClickableArea
-from src.labweb.properties.text import Text
+from src.labweb.primitives.text import Text
 
 
 class TextInput(ClickableArea):
