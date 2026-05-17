@@ -1,7 +1,7 @@
 from typing import Any, Self
 
 from src.labweb.system.mouse import Mouse
-from src.labweb.color import Color
+from src.labweb.properties.color import Color
 from src.labweb.entities import ContainableEntity, DisplayableEntity, ColorableEntity, CopiableEntity, EventSensitiveEntity
 from src.labweb.utils import is_inside_circle
 from pygame import Surface

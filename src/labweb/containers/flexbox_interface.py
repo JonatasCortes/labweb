@@ -1,4 +1,4 @@
-from src.labweb.color import Color
+from src.labweb.properties.color import Color
 from src.labweb.entities import ContainableEntity, Entity, DisplayableEntity, EventSensitiveEntity, CopiableEntity
 from src.labweb.area import RectangularArea
 from pygame import Surface

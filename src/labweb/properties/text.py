@@ -1,6 +1,6 @@
 from typing import Optional
 
-from src.labweb.color import Color
+from src.labweb.properties.color import Color
 from src.labweb.entities import DisplayableEntity, ContainableEntity, ColorableEntity, CopiableEntity
 import pygame
 from pygame import Surface

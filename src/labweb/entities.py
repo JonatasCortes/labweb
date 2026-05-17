@@ -1,4 +1,4 @@
-from src.labweb.color import Color
+from src.labweb.properties.color import Color
 from abc import ABC, abstractmethod
 from pygame import Surface
 from typing import Any, Self
