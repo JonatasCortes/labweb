@@ -1,4 +1,5 @@
-from src.labweb.entities import Entity, ContainableEntity
+from src.labweb.entities.entity import Entity
+from src.labweb.entities.containable import ContainableEntity
 from src.labweb.constants import VerticalAlignment, HorizontalAlignment, FlexDirection
 from src.labweb.containers.flexbox_interface import FlexBoxInterface
 

@@ -1,31 +1,13 @@
-from typing import Any, Self
+from typing import Self
 
-from src.labweb.system.mouse import Mouse
 from src.labweb.properties.color import Color
-from src.labweb.entities import ContainableEntity, DisplayableEntity, ColorableEntity, CopiableEntity, EventSensitiveEntity
+from src.labweb.areas.interface import AreaInterface
 from src.labweb.utils import is_inside_circle
 from pygame import Surface
 import pygame
 
 
-class Area(ContainableEntity, DisplayableEntity, ColorableEntity, CopiableEntity):
-
-    def __init__(self, width: int, height: int, color: Color | tuple[int, int, int] | str = "BLACK") -> None:
-        super().__init__(x=0, y=0, width=width, height=height, color=color)
-
-    def contains(self, coordinates: tuple[int, int]) -> bool:
-        error = "ERROR: contains method must be implemented by subclasses"
-        raise NotImplementedError(error)
-
-    def get_rect(self) -> tuple[int, int, int, int]:
-        return (self.get_x(), self.get_y(),
-                self.get_width(), self.get_height())
-
-    def set_color(self, color: Color | tuple[int, ...] | str) -> None:
-        self._set_color(color)
-
-
-class RectangularArea(Area):
+class RectangularArea(AreaInterface):
 
     def __init__(self,
                  width: int,
@@ -106,28 +88,3 @@ class RectangularArea(Area):
     def copy(self) -> Self:
         return self.__class__(self.get_width(), self.get_height(),
                               self.get_color(), self.get_corners_radius())
-
-
-class ClickableArea(RectangularArea, EventSensitiveEntity):
-
-    def __init__(self, width: int, height: int, color: Color | tuple[int, int, int] | str = "BLACK", corners_radius: tuple[int, int, int, int] | int = 0) -> None:
-        super().__init__(width, height, color, corners_radius)
-        self.__is_clicked = False
-        self.__is_held = False
-
-    def is_clicked(self) -> bool:
-        return self.__is_clicked
-
-    def is_held(self) -> bool:
-        return self.__is_held
-
-    def handle_event(self, *args: Any, **kwargs: Any) -> None:
-        super().handle_event(*args, **kwargs)
-        mouse = kwargs.get("mouse")
-        if not isinstance(mouse, Mouse):
-            self._raise_for_missing_parameter("mouse", Mouse.__name__)
-
-        inside = self.contains(mouse.get_position())
-
-        self.__is_clicked = mouse.is_clicked() and inside
-        self.__is_held = mouse.is_held() and inside

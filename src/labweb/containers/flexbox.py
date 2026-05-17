@@ -1,5 +1,5 @@
 from src.labweb.containers.protected_flexbox import ProtectedFlexBox
-from src.labweb.entities import Entity
+from src.labweb.entities.entity import Entity
 from typing import Optional, Union
 from src.labweb.constants import VerticalAlignment, HorizontalAlignment, FlexDirection
 

@@ -1,6 +1,10 @@
 from src.labweb.properties.color import Color
-from src.labweb.entities import ContainableEntity, Entity, DisplayableEntity, EventSensitiveEntity, CopiableEntity
-from src.labweb.area import RectangularArea
+from src.labweb.entities.entity import Entity
+from src.labweb.entities.containable import ContainableEntity
+from src.labweb.entities.displayable import DisplayableEntity
+from src.labweb.entities.event_sensitive import EventSensitiveEntity
+from src.labweb.entities.copiable import CopiableEntity
+from src.labweb.areas.rectangular_area import RectangularArea
 from pygame import Surface
 from typing import Any, Optional, Union, Self
 from abc import abstractmethod

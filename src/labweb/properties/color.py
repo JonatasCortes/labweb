@@ -1,6 +1,6 @@
 import logging
 from typing import Literal
-from src.labweb.entities import Entity
+from src.labweb.entities.entity import Entity
 
 
 class Color(Entity):

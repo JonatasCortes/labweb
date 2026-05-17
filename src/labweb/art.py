@@ -1,8 +1,8 @@
 from typing import Any
 from src.labweb.system.mouse import Mouse
 from src.labweb.properties.color import Color
-from src.labweb.area import RectangularArea
-from src.labweb.entities import EventSensitiveEntity
+from src.labweb.areas.rectangular_area import RectangularArea
+from src.labweb.entities.event_sensitive import EventSensitiveEntity
 from pygame import Surface
 import pygame
 from src.labweb.utils import point_to_segment_distance

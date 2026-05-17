@@ -2,7 +2,7 @@ import pygame
 from io import BytesIO
 from imageio_ffmpeg import get_ffmpeg_exe  # type: ignore
 import subprocess
-from src.labweb.entities import Entity
+from src.labweb.entities.entity import Entity
 
 
 class Audio(Entity):

@@ -7,7 +7,7 @@ from src.labweb.properties.color import Color
 from src.labweb.system.mouse import Mouse
 from src.labweb.system.keyboard import KeyBoard
 from src.labweb.system.clipboard import ClipBoard
-from src.labweb.area import ClickableArea
+from src.labweb.areas.clickable_area import ClickableArea
 from src.labweb.properties.text import Text
 
 
