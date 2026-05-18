@@ -144,7 +144,6 @@ class DrawingArea(RectangularArea, EventSensitiveEntity):
             self.__drawn_chunks.append((self.__brush_color,
                                         self.__mouse_positions))
             self.__mouse_positions = []
-            self.__clean_chunks()
 
     def __dynamic_eraser_increment(self) -> int:
         width = self.get_eraser_width()
@@ -197,13 +196,6 @@ class DrawingArea(RectangularArea, EventSensitiveEntity):
         if self.is_filling() and mouse.is_clicked() and self.contains(mouse.get_position()):
             self.__fill()
 
-    def __clean_chunks(self):
-        self.__drawn_chunks = [
-            (color, chunk)
-            for color, chunk in self.__drawn_chunks
-            if len(chunk) >= 2
-        ]
-
     def __draw(self, screen: Surface):
         if not self.__drawn_chunks and not self.__mouse_positions:
             return
@@ -226,5 +218,13 @@ class DrawingArea(RectangularArea, EventSensitiveEntity):
 
     def display(self, screen: Surface) -> None:
         super().display(screen)
+
+        clipping_mask = pygame.Rect(self.get_rect())
+
+        previous_mask = screen.get_clip()
+        screen.set_clip(clipping_mask)
+
         self.__draw(screen)
         self.__draw_cursor(screen, self.__current_mouse_pos)
+
+        screen.set_clip(previous_mask)
