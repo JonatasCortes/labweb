@@ -10,24 +10,22 @@ class Audio(Entity):
     def __init__(self, audio: str | BytesIO) -> None:
         self.set(audio)
 
-    def set(self, sound_effect: str | BytesIO, volume: float | None = None):
-        if isinstance(sound_effect, str):
-            sound_effect = self.__convert_to_wav(sound_effect)
+    def set(self, audio: str | BytesIO):
+        if isinstance(audio, str):
+            audio = self.__convert_to_wav(audio)
         try:
-            self.__sound = pygame.mixer.Sound(sound_effect)
-            if volume:
-                self.__sound.set_volume(volume)
+            self.__sound = pygame.mixer.Sound(audio)
         except pygame.error as e:
             error = f"ERROR: Unnable to resolve sound effect file. {e}"
             raise RuntimeError(error)
 
-    def play(self):
-        self.__sound.play()
+    def play(self, loops: int = 1):
+        self.__sound.play(loops)
 
-    def __convert_to_wav(self, sound_effect: str) -> BytesIO:
+    def __convert_to_wav(self, audio: str) -> BytesIO:
         ffmpeg = get_ffmpeg_exe()
 
-        process = subprocess.run([ffmpeg, "-i", sound_effect, "-ac", "1",
+        process = subprocess.run([ffmpeg, "-i", audio, "-ac", "1",
                                   "-ar", "16000", "-sample_fmt", "s16",
                                   "-f", "wav", "-"],
                                  stdout=subprocess.PIPE,
