@@ -25,13 +25,14 @@ class DrawingArea(RectangularArea, EventSensitiveEntity):
     def __init__(self,
                  width: int,
                  height: int,
+                 corners_radius: tuple[int, int, int, int] | int = 0,
                  background_color: Color | tuple[int,
                                                  int, int] | str = "WHITE",
                  brush_color: Color | tuple[int, int, int] | str = "BLACK",
                  brush_width: int = 10,
                  eraser_width: int = 10) -> None:
 
-        super().__init__(width, height, background_color)
+        super().__init__(width, height, background_color, corners_radius)
         self.set_brush_color(brush_color)
         self.set_brush_width(brush_width)
         self.set_eraser_width(eraser_width)
@@ -71,6 +72,7 @@ class DrawingArea(RectangularArea, EventSensitiveEntity):
 
     def copy(self) -> "DrawingArea":
         return self.__class__(self.get_width(), self.get_height(),
+                              self.get_corners_radius(),
                               self.get_color(), self.get_brush_color(),
                               self.get_brush_width(), self.get_eraser_width())
 
