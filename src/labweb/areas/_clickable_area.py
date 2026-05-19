@@ -1,7 +1,7 @@
 from typing import Any
 from ._rectangular_area import RectangularArea
 from src.labweb.entity_types import EventSensitiveEntity
-from src.labweb.primitives import Color
+from src.labweb._primitives import Color
 from src.labweb.system import Mouse
 
 

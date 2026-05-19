@@ -1,6 +1,6 @@
 from src.labweb.areas import ClickableArea
-from ._protected_flexbox import ProtectedFlexBox
+from ._flexbox import FlexBox
 
 
-class ClickableFlexBox(ProtectedFlexBox, ClickableArea):
+class ClickableFlexBox(FlexBox, ClickableArea):
     pass

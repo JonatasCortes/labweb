@@ -1,4 +1,4 @@
-from ._interface import Listener
+from ._default import Listener
 from ._protected_change import ProtectedChangeListener
 
 

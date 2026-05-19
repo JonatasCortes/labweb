@@ -1,8 +1,8 @@
 from typing import Self
 
-from src.labweb.primitives import Color
+from src.labweb._primitives import Color
 from ._interface import Area
-from src.labweb.utils import is_inside_circle
+from src.labweb._utils import is_inside_circle
 from pygame import Surface
 import pygame
 

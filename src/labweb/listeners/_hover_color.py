@@ -1,5 +1,5 @@
 from src.labweb.system import Mouse
-from src.labweb.primitives import Color
+from src.labweb._primitives import Color
 from src.labweb.areas import Area
 from typing import Any
 from ._protected_change import ProtectedChangeListener

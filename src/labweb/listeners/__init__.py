@@ -1,4 +1,4 @@
-from ._interface import Listener
+from ._default import Listener
 from ._first_time import FirstTimeListener
 from ._change import ChangeListener
 from ._hover_color import HoverColorListener

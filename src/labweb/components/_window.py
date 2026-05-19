@@ -1,7 +1,7 @@
 from typing import Iterable
 
 from pygame.locals import QUIT
-from src.labweb.primitives import Color
+from src.labweb._primitives import Color
 from src.labweb.containers import FlexBox, FlexDirection, HorizontalAlignment, VerticalAlignment
 from src.labweb.system import Mouse, KeyBoard, ClipBoard
 from pygame._sdl2 import Window as PygameWindow

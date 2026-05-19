@@ -2,7 +2,7 @@ from src.labweb.containers import FlexBox, FlexDirection, HorizontalAlignment, V
 from src.labweb.system import Mouse
 from pygame.event import Event
 from typing import Any
-from src.labweb.primitives import Color
+from src.labweb._primitives import Color
 
 
 class DragDrop(FlexBox):

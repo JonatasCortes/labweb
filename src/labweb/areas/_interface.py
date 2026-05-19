@@ -1,5 +1,5 @@
 from src.labweb.entity_types import ContainableEntity, DisplayableEntity, CopiableEntity, ColorableEntity
-from src.labweb.primitives import Color
+from src.labweb._primitives import Color
 
 
 class Area(ContainableEntity, DisplayableEntity, ColorableEntity, CopiableEntity):

@@ -1,6 +1,6 @@
 from typing import Optional
 
-from src.labweb.primitives import Color
+from src.labweb._primitives import Color
 from src.labweb.areas import ClickableArea
 import pygame
 from pygame import Surface

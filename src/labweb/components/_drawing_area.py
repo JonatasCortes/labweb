@@ -1,6 +1,6 @@
 from typing import Any, Self
 from src.labweb.system import Mouse
-from src.labweb.primitives import Color
+from src.labweb._primitives import Color
 from src.labweb.areas import ClickableArea
 from src.labweb.entity_types import EventSensitiveEntity
 from pygame import Surface
