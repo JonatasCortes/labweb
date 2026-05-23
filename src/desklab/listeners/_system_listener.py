@@ -1,5 +1,5 @@
 from typing import Callable, Any, Type
-from src.desklab.system import SystemInput
+from desklab.system import SystemInput
 from ._protected_listener import ProtectedListener
 
 

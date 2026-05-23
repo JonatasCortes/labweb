@@ -1,4 +1,4 @@
-from src.desklab.system import ClipBoard
+from desklab.system import ClipBoard
 from ._system_listener import SystemListener
 
 

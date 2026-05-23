@@ -1,7 +1,7 @@
 # fmt: off
 from PIL import Image as PilImage
 import numpy as np
-from src.desklab.entity_types import DisplayableEntity, ContainableEntity, CopiableEntity
+from desklab.entity_types import DisplayableEntity, ContainableEntity, CopiableEntity
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame

@@ -1,8 +1,8 @@
 from typing import Any
 from ._rectangular_area import RectangularArea
-from src.desklab.entity_types import EventSensitiveEntity
-from src.desklab._primitives import Color
-from src.desklab.system import Mouse
+from desklab.entity_types import EventSensitiveEntity
+from desklab.primitives import Color
+from desklab.system import Mouse
 
 
 class ClickableArea(RectangularArea, EventSensitiveEntity):

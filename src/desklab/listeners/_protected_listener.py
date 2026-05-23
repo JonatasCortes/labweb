@@ -1,5 +1,5 @@
 from typing import Callable, Any
-from src.desklab.entity_types import EventSensitiveEntity
+from desklab.entity_types import EventSensitiveEntity
 from typing import Any, Callable
 
 

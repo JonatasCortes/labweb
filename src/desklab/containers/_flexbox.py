@@ -1,4 +1,4 @@
-from src.desklab.entity_types import Entity
+from desklab.entity_types import Entity
 from typing import Callable, Optional, Self, Union, TypeVar
 from ._constants import VerticalAlignment, HorizontalAlignment, FlexDirection
 from ._protected_flexbox import ProtectedFlexBox

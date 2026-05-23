@@ -1,5 +1,5 @@
-from src.desklab.entity_types import ContainableEntity, DisplayableEntity, CopiableEntity, ColorableEntity
-from src.desklab._primitives import Color
+from desklab.entity_types import ContainableEntity, DisplayableEntity, CopiableEntity, ColorableEntity
+from desklab.primitives import Color
 
 
 class Area(ContainableEntity, DisplayableEntity, ColorableEntity, CopiableEntity):

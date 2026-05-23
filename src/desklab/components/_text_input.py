@@ -1,14 +1,15 @@
 # fmt: off
-from src.desklab.areas import ClickableArea
-from src.desklab.system import Mouse, KeyBoard, ClipBoard
-from ._text import Color, Text
+from desklab.areas import ClickableArea
+from desklab.system import Mouse, KeyBoard, ClipBoard
+from desklab.primitives import Color, Font
+from ._text import Text
 from typing import Any, Optional, Union, Tuple, Final
 import re
 import time
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
-from pygame import Surface, Rect
+from pygame import Surface
 # fmt: on
 
 
@@ -32,17 +33,18 @@ class TextInput(ClickableArea):
     def __init__(self,
                  width: int,
                  height: int,
+                 font: Optional[Font] = None,
+                 text_color: Union[Color, Tuple[int, int, int], str] = "BLACK",
                  corners_radius: Union[Tuple[int, int, int, int], int] = 0,
                  background_color: Union[Color,
-                                         Tuple[int, int, int], str] = "WHITE",
-                 text_color: Union[Color, Tuple[int, int, int], str] = "BLACK",
-                 text_font: str = "arial") -> None:
+                                         Tuple[int, int, int], str] = "WHITE") -> None:
 
         super().__init__(width, height, background_color, corners_radius)
 
-        text = Text("", color=text_color, font=text_font)
         text_height = int(height*self.__TEXT_PROPORTION_RELATIVE_TO_HEIGHT)
-        self.__text: Text = text.maximize(99999, text_height)
+        raw_text = Text("", font, text_color)
+        self.__text = raw_text.fitted_within(max_height=text_height)
+        self.__font = self.__text.get_font()
 
         if isinstance(text_color, Color):
             self.__text_color: Color = text_color
@@ -72,8 +74,8 @@ class TextInput(ClickableArea):
         return super()._set_height(height)
 
     def __get_width_up_to_index(self, index: int) -> int:
-        sub_text = self.__text.sub(end=index)
-        return self.__text.get_font().size(sub_text.get_text())[0]
+        text_up_to_index = self.__text.get_text()[:index]
+        return self.__font.measure_text(text_up_to_index)[0]
 
     def __get_closest_index_from_mouse_pos(self, mouse_x: int) -> int:
         width_up_to_mouse_x: int = mouse_x - self.get_x() + self.__scroll_offset
@@ -81,8 +83,8 @@ class TextInput(ClickableArea):
         min_distance: float = width_up_to_mouse_x
 
         for i in range(len(self.__text) + 1):
-            width_up_to_index = self.__get_width_up_to_index(i) + \
-                self.__LEFT_MARGIN
+            width_up_to_index = (self.__get_width_up_to_index(i) +
+                                 self.__LEFT_MARGIN)
             distance_to_mouse = abs(width_up_to_mouse_x - width_up_to_index)
             if distance_to_mouse < min_distance:
                 min_distance = distance_to_mouse
@@ -240,6 +242,10 @@ class TextInput(ClickableArea):
 
     def __select_word_at(self, index: int) -> None:
         text_around: str = self.__text.get_text()
+        if index >= len(text_around):
+            index = len(text_around)-1
+        if index < 0:
+            return
         start: int = index
         while start > 0 and text_around[start-1].isalnum():
             start -= 1
@@ -286,8 +292,8 @@ class TextInput(ClickableArea):
     def display(self, screen: Surface) -> None:
         super().display(screen)
 
-        text_area: Rect = Rect(self.get_x(), self.get_y(),
-                               self.get_width(), self.get_height())
+        text_area: pygame.Rect = pygame.Rect(self.get_x(), self.get_y(),
+                                             self.get_width(), self.get_height())
         old_clip = screen.get_clip()
         screen.set_clip(text_area)
 
@@ -304,16 +310,15 @@ class TextInput(ClickableArea):
             min(self.__selection_anchor, self.__cursor_index))
         end_x: int = self.__get_width_up_to_index(
             max(self.__selection_anchor, self.__cursor_index))
-        sel_rect: Rect = Rect(self.get_x() + self.__LEFT_MARGIN + start_x -
-                              self.__scroll_offset, self.get_y(), end_x - start_x,
-                              self.get_height())
+        sel_rect: pygame.Rect = pygame.Rect(self.get_x() + self.__LEFT_MARGIN + start_x -
+                                            self.__scroll_offset, self.get_y(), end_x - start_x,
+                                            self.get_height())
         pygame.draw.rect(screen, self.__SELECTED_AREA_COLOR, sel_rect)
 
     def __display_text(self, screen: Surface) -> None:
-        font = self.__text.get_font()
         text = self.__text.get_text()
         color = self.__text_color.get_tuple()
-        text_surface: Surface = font.render(text, True, color)
+        text_surface: Surface = self.__font.render(text, color)
         text_surface_x = self.get_x() + self.__LEFT_MARGIN - self.__scroll_offset
         text_surface_y = self.get_y() + (self.get_height() - text_surface.get_height()) // 2
         screen.blit(text_surface, (text_surface_x, text_surface_y))

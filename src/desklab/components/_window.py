@@ -1,9 +1,9 @@
 # fmt: off
 import sys
 from pygame._sdl2 import Window as PygameWindow
-from src.desklab.system import Mouse, KeyBoard, ClipBoard
-from src.desklab.containers import FlexBox, FlexDirection, HorizontalAlignment, VerticalAlignment
-from src.desklab._primitives import Color
+from desklab.system import Mouse, KeyBoard, ClipBoard
+from desklab.containers import FlexBox, FlexDirection, HorizontalAlignment, VerticalAlignment
+from desklab.primitives import Color
 from pygame.locals import QUIT
 from typing import Iterable
 import os

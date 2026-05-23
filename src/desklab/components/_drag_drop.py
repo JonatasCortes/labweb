@@ -1,8 +1,8 @@
 # fmt: off
-from src.desklab._primitives import Color
+from desklab.primitives import Color
 from typing import Any
-from src.desklab.system import Mouse
-from src.desklab.containers import FlexBox, FlexDirection, HorizontalAlignment, VerticalAlignment
+from desklab.system import Mouse
+from desklab.containers import FlexBox, FlexDirection, HorizontalAlignment, VerticalAlignment
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 from pygame.event import Event
