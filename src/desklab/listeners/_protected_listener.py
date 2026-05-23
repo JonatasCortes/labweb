@@ -23,17 +23,20 @@ class ProtectedListener(EventSensitiveEntity):
             return
 
         condition_value = self._trigger_conditions(*args, **kwargs)
-        should_trigger = False
 
-        if self.__on_change and self.__previous_state is not None and condition_value != self.__previous_state:
-            should_trigger = True
-        elif condition_value:
-            should_trigger = True
+        if self.__on_change:
+            should_trigger = (
+                self.__previous_state is not None
+                and condition_value != self.__previous_state
+            )
+        else:
+            should_trigger = condition_value
 
         self.__previous_state = condition_value
 
         if should_trigger:
             self._trigger_actions(*args, **kwargs)
+
             if self.__listen_once:
                 self.__has_triggered = True
 
