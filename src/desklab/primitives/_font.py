@@ -1,6 +1,6 @@
 import os
 from typing import Any, Optional, Self
-from src.desklab.entity_types._copiable import CopiableEntity
+from desklab.entity_types._copiable import CopiableEntity
 import pygame
 
 

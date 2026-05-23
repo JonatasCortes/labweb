@@ -1,4 +1,4 @@
-from src.desklab.entity_types import Entity, ContainableEntity
+from desklab.entity_types import Entity, ContainableEntity
 from ._constants import VerticalAlignment, HorizontalAlignment, FlexDirection
 from ._flexbox_interface import FlexBoxInterface
 

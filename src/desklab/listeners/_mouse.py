@@ -1,4 +1,4 @@
-from src.desklab.system import Mouse
+from desklab.system import Mouse
 from ._system_listener import SystemListener
 
 

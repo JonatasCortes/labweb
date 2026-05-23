@@ -1,6 +1,6 @@
 # fmt: off
-from src.desklab.areas import ClickableArea
-from src.desklab.primitives import Color, Font
+from desklab.areas import ClickableArea
+from desklab.primitives import Color, Font
 from typing import Any, Optional, Self
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"

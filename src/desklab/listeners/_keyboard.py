@@ -1,5 +1,5 @@
 from typing import Callable, Any
-from src.desklab.system import KeyBoard
+from desklab.system import KeyBoard
 from ._system_listener import SystemListener
 
 

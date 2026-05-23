@@ -1,7 +1,7 @@
 # fmt: off
-from src.desklab.areas import ClickableArea
-from src.desklab.system import Mouse, KeyBoard, ClipBoard
-from src.desklab.primitives import Color, Font
+from desklab.areas import ClickableArea
+from desklab.system import Mouse, KeyBoard, ClipBoard
+from desklab.primitives import Color, Font
 from ._text import Text
 from typing import Any, Optional, Union, Tuple, Final
 import re

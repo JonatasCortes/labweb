@@ -1,5 +1,5 @@
-from src.desklab.system import Mouse
-from src.desklab.areas import Area
+from desklab.system import Mouse
+from desklab.areas import Area
 from typing import Any, Callable
 from ._protected_listener import ProtectedListener
 

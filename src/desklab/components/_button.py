@@ -1,8 +1,8 @@
 from typing import Any, Callable, Self
-from src.desklab.containers import (FlexDirection, HorizontalAlignment,
-                                    VerticalAlignment, FlexBox)
-from src.desklab.areas import ClickableArea
-from src.desklab.primitives import Color
+from desklab.containers import (FlexDirection, HorizontalAlignment,
+                                VerticalAlignment, FlexBox)
+from desklab.areas import ClickableArea
+from desklab.primitives import Color
 
 
 class Button(FlexBox, ClickableArea):

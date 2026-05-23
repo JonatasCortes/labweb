@@ -1,7 +1,7 @@
 # fmt: off
 from abc import ABC, abstractmethod
 from typing import no_type_check
-from src.desklab.media import Image
+from desklab.media import Image
 from ._system_input import SystemInput
 from typing import Optional, List, Final, no_type_check
 from PIL import Image as PilImage
