@@ -1,5 +1,5 @@
 from ._entity import Entity
-from src.desklab._primitives import Color
+from src.desklab.primitives import Color
 from typing import Any
 
 

@@ -1,7 +1,7 @@
 from typing import Any
 from ._rectangular_area import RectangularArea
 from src.desklab.entity_types import EventSensitiveEntity
-from src.desklab._primitives import Color
+from src.desklab.primitives import Color
 from src.desklab.system import Mouse
 
 

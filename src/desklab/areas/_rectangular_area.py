@@ -1,7 +1,7 @@
 # fmt: off
 from src.desklab._utils import is_inside_circle
 from ._interface import Area
-from src.desklab._primitives import Color
+from src.desklab.primitives import Color
 from typing import Self
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"

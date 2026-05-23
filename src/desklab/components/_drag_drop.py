@@ -1,5 +1,5 @@
 # fmt: off
-from src.desklab._primitives import Color
+from src.desklab.primitives import Color
 from typing import Any
 from src.desklab.system import Mouse
 from src.desklab.containers import FlexBox, FlexDirection, HorizontalAlignment, VerticalAlignment

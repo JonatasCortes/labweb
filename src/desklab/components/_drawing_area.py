@@ -3,7 +3,7 @@ import math
 from enum import Enum
 from src.desklab.entity_types import EventSensitiveEntity
 from src.desklab.areas import ClickableArea
-from src.desklab._primitives import Color
+from src.desklab.primitives import Color
 from src.desklab.system import Mouse
 from typing import Any, Self
 import os

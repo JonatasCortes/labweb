@@ -2,7 +2,7 @@ from typing import Any, Callable, Self
 from src.desklab.containers import (FlexDirection, HorizontalAlignment,
                                     VerticalAlignment, FlexBox)
 from src.desklab.areas import ClickableArea
-from src.desklab._primitives import Color
+from src.desklab.primitives import Color
 
 
 class Button(FlexBox, ClickableArea):

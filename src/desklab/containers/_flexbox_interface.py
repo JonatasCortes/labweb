@@ -4,7 +4,7 @@ from abc import abstractmethod
 from typing import Any, Callable, Optional, Union, Self, TypeVar
 from src.desklab.areas import RectangularArea
 from src.desklab.entity_types import Entity, ContainableEntity, DisplayableEntity, EventSensitiveEntity, CopiableEntity
-from src.desklab._primitives import Color
+from src.desklab.primitives import Color
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 from pygame import Surface
