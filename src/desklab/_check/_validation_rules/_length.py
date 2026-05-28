@@ -28,6 +28,6 @@ class LengthValidationRule(ValidationRule):
                                         f"'comparison' must be one of: {operators}")
 
         name = variable_name or "Value"
-        message = f"{name} must satisfy the condition: length({name}) {comparison} {reference_length}"
+        message = f"length({name}) {comparison} {reference_length}"
 
         super().__init__(compare, message)

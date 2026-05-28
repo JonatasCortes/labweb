@@ -64,7 +64,6 @@ def type_check(target: Any) -> Any:
         return _class_full_type_check()(target)
     if callable(target):
         return _parameter_type_check()(target)
-
     raise InvalidDecorationTarget("type_check",
                                   [type, Type[Callable[..., Any]]],
                                   target)
